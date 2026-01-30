@@ -140,7 +140,7 @@ import { formatAmount } from '@/utils'
 import CourseInstructors from '@/components/CourseInstructors.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
-import colors from '@/utils/frappe-ui-colors.json'
+import colors from '@/utils/ui-colors.json'
 
 const { user } = sessionStore()
 

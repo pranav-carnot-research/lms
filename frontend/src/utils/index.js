@@ -1,6 +1,6 @@
 import { call, toast } from 'frappe-ui'
 import { useTimeAgo } from '@vueuse/core'
-import colorsJSON from '@/utils/frappe-ui-colors.json'
+import colorsJSON from '@/utils/ui-colors.json'
 import { Quiz } from '@/utils/quiz'
 import { Program } from '@/utils/program'
 import { Assignment } from '@/utils/assignment'
