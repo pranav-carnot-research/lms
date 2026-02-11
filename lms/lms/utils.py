@@ -767,6 +767,42 @@ def get_courses(filters=None, start=0):
 	if not filters:
 		filters = {}
 
+	# Restrict course listing for logged-in students to only courses
+	# they are enrolled in via batches. Administrators and LMS staff
+	# (Course Creator / Moderator / Batch Evaluator) continue to see
+	# all courses matching the existing filters.
+	if frappe.session.user != "Guest":
+		roles = frappe.get_roles(frappe.session.user)
+		is_privileged_user = (
+			frappe.session.user == "Administrator"
+			or "Course Creator" in roles
+			or "Moderator" in roles
+			or "Batch Evaluator" in roles
+		)
+
+		if not is_privileged_user:
+			# Get batches that the current user is enrolled in
+			enrolled_batches = frappe.get_all(
+				"LMS Batch Enrollment", {"member": frappe.session.user}, pluck="batch"
+			)
+
+			# If user is not enrolled in any batch, do not return any courses
+			if not enrolled_batches:
+				return []
+
+			# From those batches, get the linked course names via Batch Course
+			enrolled_courses = frappe.get_all(
+				"Batch Course", {"parent": ["in", enrolled_batches]}, pluck="course"
+			)
+
+			# If no courses are linked to the enrolled batches, return empty list
+			if not enrolled_courses:
+				return []
+
+			# Ensure we only show published courses that are part of the enrolled course list
+			filters["published"] = 1
+			filters["name"] = ["in", enrolled_courses]
+
 	filters, or_filters, show_featured = update_course_filters(filters)
 	fields = get_course_fields()
 
@@ -906,6 +942,40 @@ def get_course_fields():
 @rate_limit(limit=500, seconds=60 * 60)
 def get_course_details(course):
 	fields = get_course_fields()
+
+	# For logged-in students (non-Administrator and non-staff), restrict
+	# direct access to course details to only those courses that are
+	# linked to batches they are enrolled in.
+	if frappe.session.user != "Guest":
+		roles = frappe.get_roles(frappe.session.user)
+		is_privileged_user = (
+			frappe.session.user == "Administrator"
+			or "Course Creator" in roles
+			or "Moderator" in roles
+			or "Batch Evaluator" in roles
+		)
+
+		if not is_privileged_user:
+			enrolled_batches = frappe.get_all(
+				"LMS Batch Enrollment", {"member": frappe.session.user}, pluck="batch"
+			)
+
+			# If user is not enrolled in any batch, they must not access any course details
+			if not enrolled_batches:
+				frappe.throw(
+					_("You are not enrolled in this course."), frappe.PermissionError
+				)
+
+			enrolled_courses = frappe.get_all(
+				"Batch Course", {"parent": ["in", enrolled_batches]}, pluck="course"
+			)
+
+			# If the requested course is not part of their enrolled batches, block access
+			if course not in enrolled_courses:
+				frappe.throw(
+					_("You are not enrolled in this course."), frappe.PermissionError
+				)
+
 	course_details = frappe.db.get_value(
 		"LMS Course",
 		course,
