@@ -49,7 +49,7 @@
 						</Button>
 					</div>
 					<div class="mt-2 text-center text-sm text-ink-gray-4">
-						{{ __('Image search powered by') }}
+						{{ __('Image search') }}
 						<a class="underline" target="_blank" href="https://unsplash.com">
 							{{ __('Unsplash') }}
 						</a>

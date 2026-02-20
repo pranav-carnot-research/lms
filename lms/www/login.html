@@ -103,7 +103,8 @@
 							{% endfor %}
 						</div>
 
-						{% if login_with_frappe_cloud_url %}
+						{# Login with Frappe Cloud section hidden - branding customization #}
+						{% if false and login_with_frappe_cloud_url %}
 						<div class="social-login-buttons">
 							<div class="login-button-wrapper">
 								<a href="{{ login_with_frappe_cloud_url }}"
@@ -160,7 +161,7 @@
 	</section>
 	{%- endif -%}
 	<section class='for-signup {{ "signup-disabled" if disable_signup else "" }}'>
-		{{ logo_section(_('Create a {0} Account').format(app_name or _("Frappe"))) }}
+		{{ logo_section(_('Create Account')) }}
 		<div class="login-content page-card">
 			{%- if not disable_signup -%}
 			{{ signup_form_template }}

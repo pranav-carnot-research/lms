@@ -25,6 +25,9 @@ def update_website_context(context):
 	Called from hooks.
 	"""
 	context.widgets = Widgets()
+	# Hide "Powered by Frappe" footer on login page
+	if context.get("for_test") == "login.html":
+		context["show_footer_on_login"] = 0
 
 
 class Widgets:
