@@ -212,9 +212,56 @@
 		<meta name="twitter:title" content="{{ meta.title }}" />
 		<meta name="twitter:image" content="{{ meta.image }}" />
 		<meta name="twitter:description" content="{{ meta.description }}" />
+		<style>
+			.lms-boot-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1rem;
+				background: #fff;
+			}
+			@media (prefers-color-scheme: dark) {
+				.lms-boot-loader {
+					background: #0f0f0f;
+				}
+				.lms-boot-loader__text {
+					color: #a1a1aa;
+				}
+				.lms-boot-loader__spinner {
+					border-color: #3f3f46;
+					border-top-color: #60a5fa;
+				}
+			}
+			.lms-boot-loader__spinner {
+				width: 2.5rem;
+				height: 2.5rem;
+				border: 3px solid #e5e7eb;
+				border-top-color: #3b82f6;
+				border-radius: 50%;
+				animation: lms-boot-spin 0.75s linear infinite;
+			}
+			.lms-boot-loader__text {
+				margin: 0;
+				font-size: 0.9375rem;
+				color: #6b7280;
+			}
+			@keyframes lms-boot-spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
 	</head>
 	<body class="sm:overscroll-y-none no-scrollbar">
 		<div id="app">
+			<div id="lms-boot-loader" class="lms-boot-loader" aria-live="polite" aria-busy="true">
+				<div class="lms-boot-loader__spinner" aria-hidden="true"></div>
+				<p class="lms-boot-loader__text">Loading…</p>
+			</div>
 			<div id="seo-content">
 				<h1>{{ meta.title }}</h1>
 				<p>
