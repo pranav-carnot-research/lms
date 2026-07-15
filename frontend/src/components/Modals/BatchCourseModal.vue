@@ -45,7 +45,6 @@
 import { Dialog, createResource, toast } from 'frappe-ui'
 import { ref, inject } from 'vue'
 import Link from '@/components/Controls/Link.vue'
-import { useOnboarding } from 'frappe-ui/frappe'
 import { openSettings } from '@/utils'
 import { useRouter } from 'vue-router'
 
@@ -55,7 +54,6 @@ const evaluator = ref(null)
 const user = inject('$user')
 const courses = defineModel('courses')
 const router = useRouter()
-const { updateOnboardingStep } = useOnboarding('learning')
 
 const props = defineProps({
 	batch: {
@@ -85,9 +83,6 @@ const addCourse = (close) => {
 		{},
 		{
 			onSuccess() {
-				if (user.data?.is_system_manager)
-					updateOnboardingStep('add_batch_course')
-
 				close()
 				courses.value.reload()
 				course.value = null

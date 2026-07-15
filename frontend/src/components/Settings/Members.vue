@@ -121,7 +121,6 @@ import { Avatar, Button, createResource, Dialog, FormControl } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import { ref, watch, reactive, inject } from 'vue'
 import { RefreshCw, Plus, Search, Shield } from 'lucide-vue-next'
-import { useOnboarding } from 'frappe-ui/frappe'
 import type { User } from '@/components/Settings/types'
 
 type Member = {
@@ -140,7 +139,6 @@ const memberList = ref<Member[]>([])
 const hasNextPage = ref(false)
 const showForm = ref(false)
 const user = inject<User | null>('$user')
-const { updateOnboardingStep } = useOnboarding('learning')
 
 const member = reactive({
 	email: '',
@@ -198,8 +196,6 @@ const newMember = createResource({
 	auto: false,
 	onSuccess(data: Member) {
 		show.value = false
-		if (user?.data?.is_system_manager) updateOnboardingStep('invite_students')
-
 		router.push({
 			name: 'ProfileRoles',
 			params: {

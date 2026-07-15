@@ -308,7 +308,7 @@ import {
 } from '@/utils'
 import { Trash2, X } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
-import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
+import { useTelemetry } from 'frappe-ui/frappe'
 import { sessionStore } from '../stores/session'
 import Link from '@/components/Controls/Link.vue'
 import CourseOutline from '@/components/CourseOutline.vue'
@@ -324,7 +324,6 @@ const instructors = ref([])
 const related_courses = ref([])
 const app = getCurrentInstance()
 const { capture } = useTelemetry()
-const { updateOnboardingStep } = useOnboarding('learning')
 const { $dialog } = app.appContext.config.globalProperties
 
 const props = defineProps({
@@ -498,12 +497,6 @@ const createCourse = () => {
 	courseCreationResource.submit(course, {
 		onSuccess(data) {
 			updateMetaInfo('courses', data.name, meta)
-			if (user.data?.is_system_manager) {
-				updateOnboardingStep('create_first_course', true, false, () => {
-					localStorage.setItem('firstCourse', data.name)
-				})
-			}
-
 			capture('course_created')
 			toast.success(__('Course created successfully'))
 			router.push({

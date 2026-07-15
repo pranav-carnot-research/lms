@@ -99,7 +99,7 @@ import EditorJS from '@editorjs/editorjs'
 import LessonHelp from '@/components/LessonHelp.vue'
 import { ChevronRight } from 'lucide-vue-next'
 import { getEditorTools, enablePlyr } from '@/utils'
-import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
+import { useTelemetry } from 'frappe-ui/frappe'
 
 const { brand } = sessionStore()
 const editor = ref(null)
@@ -107,7 +107,6 @@ const instructorEditor = ref(null)
 const user = inject('$user')
 const openInstructorEditor = ref(false)
 const { capture } = useTelemetry()
-const { updateOnboardingStep } = useOnboarding('learning')
 let autoSaveInterval
 let showSuccessMessage = false
 
@@ -416,9 +415,6 @@ const createNewLesson = () => {
 					{ lesson: data.name },
 					{
 						onSuccess() {
-							if (user.data?.is_system_manager)
-								updateOnboardingStep('create_first_lesson')
-
 							capture('lesson_created')
 							toast.success(__('Lesson created successfully'))
 							lessonDetails.reload()

@@ -297,7 +297,7 @@ import {
 } from '@/utils'
 import { useRouter } from 'vue-router'
 import { Trash2 } from 'lucide-vue-next'
-import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
+import { useTelemetry } from 'frappe-ui/frappe'
 import { sessionStore } from '../stores/session'
 import Uploader from '@/components/Controls/Uploader.vue'
 import MultiSelect from '@/components/Controls/MultiSelect.vue'
@@ -306,7 +306,6 @@ import Link from '@/components/Controls/Link.vue'
 const router = useRouter()
 const user = inject('$user')
 const { brand } = sessionStore()
-const { updateOnboardingStep } = useOnboarding('learning')
 const instructors = ref([])
 const app = getCurrentInstance()
 const { capture } = useTelemetry()
@@ -483,11 +482,6 @@ const createNewBatch = () => {
 		{},
 		{
 			onSuccess(data) {
-				if (user.data?.is_system_manager) {
-					updateOnboardingStep('create_first_batch', true, false, () => {
-						localStorage.setItem('firstBatch', data.name)
-					})
-				}
 				updateMetaInfo('batches', data.name, meta)
 				capture('batch_created')
 				router.push({

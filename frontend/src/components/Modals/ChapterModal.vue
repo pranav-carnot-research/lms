@@ -81,13 +81,12 @@ import {
 import { reactive, watch, inject } from 'vue'
 import { getFileSize } from '@/utils/'
 import { FileText, X } from 'lucide-vue-next'
-import { useOnboarding, useTelemetry } from 'frappe-ui/frappe'
+import { useTelemetry } from 'frappe-ui/frappe'
 
 const show = defineModel()
 const outline = defineModel('outline')
 const user = inject('$user')
 const { capture } = useTelemetry()
-const { updateOnboardingStep } = useOnboarding('learning')
 
 const props = defineProps({
 	course: {
@@ -141,9 +140,6 @@ const addChapter = async (close) => {
 				return validateChapter()
 			},
 			onSuccess: (data) => {
-				if (user.data?.is_system_manager)
-					updateOnboardingStep('create_first_chapter')
-
 				capture('chapter_created')
 				chapterReference.submit(
 					{ name: data.name },

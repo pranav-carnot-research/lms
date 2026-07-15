@@ -128,14 +128,12 @@ import {
 } from 'frappe-ui'
 import { watch, reactive, ref, inject } from 'vue'
 import Link from '@/components/Controls/Link.vue'
-import { useOnboarding } from 'frappe-ui/frappe'
 
 const show = defineModel()
 const quiz = defineModel('quiz')
 const chooseFromExisting = ref(false)
 const editMode = ref(false)
 const user = inject('$user')
-const { updateOnboardingStep } = useOnboarding('learning')
 
 const existingQuestion = reactive({
 	question: '',
@@ -278,9 +276,6 @@ const addQuestionRow = (question) => {
 		},
 		{
 			onSuccess() {
-				if (user.data?.is_system_manager)
-					updateOnboardingStep('create_first_quiz')
-
 				show.value = false
 				toast.success(__('Question added successfully'))
 				quiz.value.reload()
