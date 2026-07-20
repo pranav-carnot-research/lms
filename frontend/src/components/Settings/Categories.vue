@@ -14,7 +14,7 @@
 					class="flex items-center space-x-1 text-ink-amber-3 border border-outline-amber-1 bg-surface-amber-1 rounded-lg px-2 py-1"
 					v-if="saving"
 				>
-					<LoadingIndicator class="size-2" />
+					<Spinner size="xs" />
 					<span class="text-xs">
 						{{ __('saving...') }}
 					</span>
@@ -86,7 +86,6 @@
 import {
 	Button,
 	FormControl,
-	LoadingIndicator,
 	createListResource,
 	createResource,
 	toast,
@@ -94,6 +93,7 @@ import {
 import { Plus, Trash2, X } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { cleanError } from '@/utils'
+import Spinner from '@/components/Spinner.vue'
 
 const showForm = ref(false)
 const category = ref(null)

@@ -214,6 +214,44 @@
 		<meta name="twitter:description" content="{{ meta.description }}" />
 	</head>
 	<body class="sm:overscroll-y-none no-scrollbar">
+		<style>
+			/* Override frappe-ui boot loading screen */
+			#frappe-loading,
+			.frappe-loading,
+			[class*="frappe-loading"],
+			[id*="frappe-loading"] {
+				display: none !important;
+			}
+			#lms-loader {
+				position: fixed;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #fff;
+				z-index: 9999;
+			}
+			@media (prefers-color-scheme: dark) {
+				#lms-loader { background: #0f0f0f; }
+				#lms-loader .lms-spin { border-color: #444; border-top-color: #fff; }
+			}
+			.lms-spin {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				border: 3px solid #e5e7eb;
+				border-top-color: #171717;
+				animation: lms-spin 0.7s linear infinite;
+			}
+			@keyframes lms-spin {
+				to { transform: rotate(360deg); }
+			}
+		</style>
+
+		<div id="lms-loader">
+			<div class="lms-spin"></div>
+		</div>
+
 		<div id="app">
 			<div id="seo-content">
 				<h1>{{ meta.title }}</h1>
@@ -225,6 +263,16 @@
 		</div>
 		<script>
 			document.getElementById('seo-content').style.display = 'none';
+			// Remove loader once Vue mounts
+			const _observer = new MutationObserver(() => {
+				const app = document.getElementById('app');
+				if (app && app.children.length > 1) {
+					const loader = document.getElementById('lms-loader');
+					if (loader) loader.remove();
+					_observer.disconnect();
+				}
+			});
+			_observer.observe(document.getElementById('app'), { childList: true });
 		</script>
 		<script type="module" src="/src/main.js"></script>
 	</body>

@@ -1455,6 +1455,8 @@ def get_batch_students(filters, offset=0, limit_start=0, limit_page_length=None,
 
 	for student in students_list:
 		details = get_batch_student_details(student)
+		if not details:
+			continue
 		calculate_student_progress(batch, details)
 		students.append(details)
 
