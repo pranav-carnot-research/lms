@@ -1,2 +1,17 @@
 @import 'frappe-ui/style.css';
 @import './styles/codemirror.css';
+
+/* Replace frappe-ui's SVG spinner with a border-based spinner that matches Spinner.vue.
+   Why: frappe-ui's LoadingIndicator (used by Button :loading and other loading states)
+   renders an SVG.animate-spin; we hide its inner paths and restyle the SVG itself so
+   the same look is used everywhere without changing every call site. */
+svg.animate-spin {
+	border: 2px solid currentColor;
+	border-top-color: transparent;
+	border-radius: 9999px;
+	background: transparent;
+	box-sizing: border-box;
+}
+svg.animate-spin > * {
+	display: none;
+}
