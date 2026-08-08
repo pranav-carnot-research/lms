@@ -65,6 +65,15 @@ const routes = [
 		path: '/statistics',
 		name: 'Statistics',
 		component: () => import('@/pages/Statistics.vue'),
+		beforeEnter: (to, from, next) => {
+			const { userResource } = usersStore()
+			const isAdmin =
+				userResource?.data?.is_instructor ||
+				userResource?.data?.is_moderator ||
+				userResource?.data?.is_evaluator
+			if (isAdmin) return next()
+			return next({ name: 'Courses' })
+		},
 	},
 	{
 		path: '/user/:username',

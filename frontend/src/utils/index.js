@@ -502,6 +502,9 @@ const getSidebarItems = () => {
 					icon: 'TrendingUp',
 					to: 'Statistics',
 					activeFor: ['Statistics'],
+					condition: () => {
+						return isAdmin()
+					},
 				},
 				{
 					label: 'Contact Us',
